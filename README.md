@@ -1,3 +1,3 @@
-# ATM
+# DNA
 
-A Python ATM program with SQLite3 integration
+A Python DNA/Codon program
