@@ -1,6 +1,5 @@
 class Amino:
     def __init__(self, name=None):
-        self.aminos = amino_acid
         self.name = name
 
     # convert amino to codons
@@ -8,94 +7,29 @@ class Amino:
         if self.name in amino_to_codon:
             return amino_to_codon[self.name]
 
-    def all(self):
-        return amino_acid
+    def amino_to_code(self):
+        return amino_to_code[self.name]
 
-    def enitre(self):
-        return amino_to_codon
-
-    def codes(self):
-        return amino_codes
-
-    def amino_to_code(self, amino):
-        return amino_to_code[amino]
-
-    def code_to_amino(self, code):
-        return code_to_amino[code]
-
-    def charged(self):
-        print("Charged Aminos: \n ")
-        for i in charged:
-            for x, y in code_to_amino.items():
-                if i == x:
-                    print(y, "(" + x + ")")
-
-    def polar(self):
-        print("Polar Aminos: \n ")
-        for i in polar:
-            for x, y in code_to_amino.items():
-                if i == x:
-                    print(y, "(" + x + ")")
-
-
-    def hydrophobic(self):
-        print("Hydrophobic Aminos: \n ")
-        for i in hydrophobic:
-            for x, y in code_to_amino.items():
-                if i == x:
-                    print(y, "(" + x + ")")
+    def code_to_amino(self):
+        return code_to_amino[self.name]
 
     # when called, argument can be either amino name or amino code
-    def is_charged(self, amino):
+    def process_question(self, property_name):
         # if amino acid name, convert amino acid to code as list contains codes
-        if amino in amino_acid:
-            inx = amino_acid.index(amino)
-            if amino_codes[inx] in charged:
+        if self.name in amino_acid:
+            inx = amino_acid.index(self.name)
+            if amino_codes[inx] in property_name:
                 return True
-            elif amino_codes[inx] not in charged:
+            elif amino_codes[inx] not in property_name:
                 return False
             else:
                 return None
-        elif amino in charged:
+        elif self.name in property_name:
             return True
-        # return False if not charged, but is an amino acid
-        elif amino not in charged and amino in amino_codes:
+        # return False if amino does not have property, but is an amino acid
+        elif self.name not in property_name and self.name in amino_codes:
             return False
         # return None if not amino acid
-        else:
-            return None
-
-    def is_polar(self, amino):
-        if amino in amino_acid:
-            # convert amino acid to code
-            inx = amino_acid.index(amino)
-            if amino_codes[inx] in polar:
-                return True
-            elif amino_codes[inx] not in polar:
-                return False
-            else:
-                return None
-        elif amino in polar:
-            return True
-        elif amino not in polar and amino in amino_codes:
-            return False
-        else:
-            return None
-
-    def is_hydrophobic(self, amino):
-        if amino in amino_acid:
-            # convert amino acid to code
-            inx = amino_acid.index(amino)
-            if amino_codes[inx] in hydrophobic:
-                return True
-            elif amino_codes[inx] not in hydrophobic:
-                return False
-            else:
-                return None
-        elif amino in hydrophobic:
-            return True
-        elif amino not in hydrophobic and amino in amino_codes:
-            return False
         else:
             return None
 
@@ -110,33 +44,28 @@ class Codon:
         if self.name in codon_to_amino:
             return codon_to_amino[self.name]
 
-    def all(self):
-        return nucleotide_seq
-
-    def entire(self):
-        return codon_to_amino
-
 
 amino_acid = ["Isoleucine", "Leucine", "Valine", "Phenylalanine", "Methionine", "Cysteine",
-                  "Alanine", "Glycine", "Proline", "Threonine", "Serine", "Tyrosine", "Tryptophan",
-                  "Glutamine", "Asparagine", "Histidine", "Glutamic Acid", "Aspartic Acid", "Lysine",
-                  "Arginine", "Stop Codons"]
+              "Alanine", "Glycine", "Proline", "Threonine", "Serine", "Tyrosine", "Tryptophan",
+              "Glutamine", "Asparagine", "Histidine", "Glutamic Acid", "Aspartic Acid", "Lysine",
+              "Arginine", "Stop Codons"]
 
 amino_codes = ["Ile", "Leu", "Val", "Phe", "Met", "Cys", "Ala", "Gly", "Pro", "Thr", "Ser", "Tyr",
                "Trp", "Gln", "Asn", "His", "Glu", "Asp", "Lys", "Arg", "Stop"]
 
 nucleotide_seq = [["ATT", "ATC", "ATA"], ["CTT", "CTC", "CTA", "CTG", "TTA", "TTG"],
-                      ["GTT", "GTC", "GTA", "GTG"], ["TTT", "TTC"], ["ATG"], ["TGT", "TGC"],
-                      ["GCT", "GCC", "GCA", "GCG"], ["GGT", "GGC", "GGA", "GGG"],
-                      ["CCT", "CCC", "CCA", "CCG"], ["ACT", "ACC", "ACA", "ACG"],
-                      ["TCT", "TCC", "TCA", "TCG", "AGT", "AGC"], ["TAT", "TAC"], ["TGG"],
-                      ["CAA", "CAG"], ["AAT", "AAC"], ["CAT", "CAC"], ["GAA", "GAG"], ["GAT", "GAC"],
-                      ["AAA", "AAG"], ["CGT", "CGC", "CGA", "CGG", "AGA", "AGG"], ["TAA", "TAG", "TGA"]
-                      ]
+                  ["GTT", "GTC", "GTA", "GTG"], ["TTT", "TTC"], ["ATG"], ["TGT", "TGC"],
+                  ["GCT", "GCC", "GCA", "GCG"], ["GGT", "GGC", "GGA", "GGG"],
+                  ["CCT", "CCC", "CCA", "CCG"], ["ACT", "ACC", "ACA", "ACG"],
+                  ["TCT", "TCC", "TCA", "TCG", "AGT", "AGC"], ["TAT", "TAC"], ["TGG"],
+                  ["CAA", "CAG"], ["AAT", "AAC"], ["CAT", "CAC"], ["GAA", "GAG"], ["GAT", "GAC"],
+                  ["AAA", "AAG"], ["CGT", "CGC", "CGA", "CGG", "AGA", "AGG"], ["TAA", "TAG", "TGA"]]
 
 charged = ["Arg", "Lys", "Asp", "Glu"]
 polar = ["Gln", "Asn", "His", "Ser", "Thr", "Tyr", "Cys"]
-hydrophobic = ["Ala", "Ile", "Lei", "Met", "Phe", "Val", "Pro", "Gly"]
+hydrophobic = ["Ala", "Ile", "Leu", "Met", "Phe", "Val", "Pro", "Gly"]
+essential = ["Arg", "His", "Ile", "Leu", "Lys", "Met", "Phe", "Thr", "Trp", "Val"]
+non_essential = ["Ala", "Asp", "Cys", "Glu", "Gln", "Gly", "Pro", "Ser", "Tyr"]
 
 # dict with amino codes as keys and corresponding amino acids as name
 code_to_amino = {i: v for i, v in zip(amino_codes, amino_acid)}
@@ -147,7 +76,6 @@ amino_to_code = {i: v for i, v in zip(amino_acid, amino_codes)}
 # create dict with aminos as keys and codons as values
 amino_to_codon = {i: v for i, v in zip(amino_acid, nucleotide_seq)}
 
-var = [x for i in nucleotide_seq for x in i]
 
 # iterate over nucleotide_seq and create dict with var as key and appropriate codon as value
 a = 0
@@ -159,6 +87,28 @@ while a < len(amino_acid):
     a += 1
 
 
+# get variable name
+def var_name(obj, namespace):
+    return [name for name in namespace if namespace[name] is obj][0]
+
+
+def amino_property(property_type):
+    print("\n" + var_name(property_type, globals()).capitalize() + " Aminos: \n ")
+    for i in property_type:
+        for x, y in code_to_amino.items():
+            if i == x:
+                print(y, "(" + x + ")")
+    print("\n")
+    return "\n"
+
+
+def determine_property(amino, property_type):
+    if amino.process_question(property_type) is not None:
+        print(amino.process_question(property_type))
+    else:
+        print("Amino acid name/code not recognised")
+
+
 # return line same length as string
 def section(string):
     line = "="
@@ -168,9 +118,9 @@ def section(string):
 
 
 def main():
-    help = "Type 'help' for help"
-    print(help)
-    print(section(help))
+    assist = "Type 'help' for help"
+    print(assist)
+    print(section(assist))
     while True:
         option1 = input("Amino, codon or question ").lower().strip()
         if option1 == "amino":
@@ -178,25 +128,25 @@ def main():
             if option2 in amino_to_codon:
                 # create class instance with input as argument
                 amino = Amino(option2)
-                print("Codon(s) for: " + option2 + " (" + amino.amino_to_code(option2) + ")" +"\n", amino.to_codons())
+                print("Codon(s) for: " + option2 + " (" + amino.amino_to_code() + ")" + "\n", amino.to_codons())
             elif option2 in amino_codes:
                 # get index of amino using code and create instance of class with amino
                 inx = amino_codes.index(option2)
                 value = amino_acid[inx]
                 amino = Amino(amino_acid[inx])
-                print("Codon(s) for: " + value + " (" + amino.amino_to_code(value) + ")" + "\n", amino.to_codons())
+                print("Codon(s) for: " + value + " (" + amino.amino_to_code() + ")" + "\n", amino.to_codons())
             elif option2 == "Charged":
-                amino = Amino()
-                amino.charged()
+                amino_property(charged)
             elif option2 == "Hydrophobic":
-                amino = Amino()
-                amino.hydrophobic()
+                amino_property(hydrophobic)
             elif option2 == "Polar":
-                amino = Amino()
-                amino.polar()
+                amino_property(polar)
+            elif option2 == "essential":
+                amino_property(essential)
+            elif option2.strip() == "nonessential":
+                amino_property(non_essential)
             elif option2 == "All":
-                amino = Amino()
-                print(amino.all())
+                print(amino_acid)
             else:
                 print("Invalid option")
 
@@ -204,12 +154,13 @@ def main():
             option2 = input("Enter codon: ").upper().strip()
             if option2 in codon_to_amino:
                 codon = Codon(option2)
-                amino = Amino()
-                print("Amino for: " + option2 + "\n"+ codon.to_amino() + " (" + amino.amino_to_code(codon.to_amino()) + ")")
+                print("\nAmino for: " + option2 + "\n" + codon.to_amino() + " (" + codon.to_amino() + ")" + "\n")
             elif option2 == "ALL":
-                codon = Codon()
-                print(codon.all())
+                print(nucleotide_seq)
+            elif option2 == "ENTIRE":
+                print(codon_to_amino)
 
+        # detect if a question has been input
         elif len([i.strip() for i in option1.split() if i != ""]) == 3:
             option_list = option1.split(" ")
             # ignore extra spaces
@@ -221,28 +172,48 @@ def main():
                 option_list.pop(0)
                 # ignore extra spaces
                 option_list = [i.strip() for i in option_list]
+                amino = Amino(option_list[0].capitalize())
                 if option_list[1].lower() == "charged":
-                    amino = Amino()
                     # checking if input is amino acid, if so, call function from
                     # amino class with input as argument
-                    if amino.is_charged(option_list[0].capitalize()) is not None:
-                        print(amino.is_charged(option_list[0].capitalize()))
+                    if amino.process_question(charged) is not None:
+                        print(amino.process_question(charged))
                     else:
                         print("Amino acid name/code not recognised")
 
                 elif option_list[1].lower() == "polar":
-                    amino = Amino()
-                    if amino.is_polar(option_list[0].capitalize()) is not None:
-                        print(amino.is_polar(option_list[0].capitalize()))
-                    else:
-                        print("Amino acid name/code not recognised")
+                    determine_property(amino, polar)
 
                 elif option_list[1].lower() == "hydrophobic":
-                    amino = Amino()
-                    if amino.is_hydrophobic(option_list[0].capitalize()) is not None:
-                        print(amino.is_hydrophobic(option_list[0].capitalize()))
-                    else:
-                        print("Amino acid name/code not recognised")
+                    determine_property(amino, hydrophobic)
+
+                elif option_list[1].lower() == "essential":
+                    determine_property(amino, essential)
+
+                elif option_list[1].lower() == "nonessential":
+                    determine_property(amino, non_essential)
+
+                else:
+                    print("Please enter a valid question")
+
+        # in case user input 'nonessential' as two words
+        elif len([i.strip() for i in option1.split() if i != ""]) == 4:
+            option_list = option1.split(" ")
+            # ignore extra spaces
+            option_list = [i for i in option_list if i != ""]
+            if len(option_list) != 4:
+                print("Please enter a valid question")
+            else:
+                # pop 'is'
+                option_list.pop(0)
+                # ignore extra spaces
+                option_list = [i.strip() for i in option_list]
+                amino = Amino(option_list[0].capitalize())
+                if option_list[1].lower() == "non" and option_list[2].lower() == "essential":
+                    # checking if input is amino acid, if so, call function from
+                    # amino class with input as argument
+                    if amino.process_question(non_essential) is not None:
+                        determine_property(amino, non_essential)
 
                 else:
                     print("Please enter a valid question")
@@ -253,10 +224,11 @@ def main():
             print("Type in a question in the following format:\n'is [amino acid] [property}'")
             print("Amino acids can be input as either the amino acid name, or its corresponding code")
             print("Example: \n'is Glu charged'")
-            print("Current properties include 'charged', 'polar' and 'hydrophobic'")
+            print("Current properties include 'charged', 'polar', 'hydrophobic', 'essential' and 'nonessential'")
 
         else:
             print("Invalid option")
 
 
-main()
+if __name__ == '__main__':
+    main()
