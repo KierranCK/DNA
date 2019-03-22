@@ -30,8 +30,7 @@ class Amino:
         elif self.name not in property_name and self.name in amino_codes:
             return False
         # return None if not amino acid
-        else:
-            return None
+        return None
 
 
 class Codon:
@@ -43,6 +42,38 @@ class Codon:
     def to_amino(self):
         if self.name in codon_to_amino:
             return codon_to_amino[self.name]
+
+    def to_rna(self):
+        lst1 = []
+        dna = ["A", "T", "C", "G"]
+        rna = ["T", "U", "G", "C"]
+        for i in self.name:
+            for x, y in enumerate(dna):
+                if i == y:
+                    lst1.append(rna[x])
+        return "".join(lst1)
+
+
+class Sequence:
+    def __init__(self, name=None):
+        self.name = name
+
+    # takes self.name (a base sequence) and spits into codons
+    def mend(self):
+        seq = self.name
+        seq_list = [i for i in seq]
+        string = ""
+        x = 0
+        while x < len(seq_list):
+            string += seq_list[x]
+            x += 1
+            if x % 3 == 0 and x != len(seq_list):
+                string += " "
+        lst3 = string.split(" ")
+        for i in lst3:
+            if len(i) != 3:
+                return None
+        return lst3
 
 
 amino_acid = ["Isoleucine", "Leucine", "Valine", "Phenylalanine", "Methionine", "Cysteine",
@@ -174,12 +205,7 @@ def main():
                 option_list = [i.strip() for i in option_list]
                 amino = Amino(option_list[0].capitalize())
                 if option_list[1].lower() == "charged":
-                    # checking if input is amino acid, if so, call function from
-                    # amino class with input as argument
-                    if amino.process_question(charged) is not None:
-                        print(amino.process_question(charged))
-                    else:
-                        print("Amino acid name/code not recognised")
+                    determine_property(amino, charged)
 
                 elif option_list[1].lower() == "polar":
                     determine_property(amino, polar)
@@ -195,7 +221,6 @@ def main():
 
                 else:
                     print("Please enter a valid question")
-
         # in case user input 'nonessential' as two words
         elif len([i.strip() for i in option1.split() if i != ""]) == 4:
             option_list = option1.split(" ")
@@ -215,8 +240,43 @@ def main():
                     if amino.process_question(non_essential) is not None:
                         determine_property(amino, non_essential)
 
+                elif option_list[1].lower() == "acid":
+                    amino = Amino(option_list[0].capitalize() + " " + option_list[1].capitalize())
+                    if option_list[2].lower() == "charged":
+                        determine_property(amino, charged)
+
+                    elif option_list[2].lower() == "polar":
+                        determine_property(amino, polar)
+
+                    elif option_list[2].lower() == "hydrophobic":
+                        determine_property(amino, hydrophobic)
+
+                    elif option_list[2].lower() == "essential":
+                        determine_property(amino, essential)
+
+                    elif option_list[2].lower() == "nonessential":
+                        determine_property(amino, non_essential)
+
                 else:
                     print("Please enter a valid question")
+
+        elif len([i.strip() for i in option1.split() if i != ""]) == 5:
+            option_list = option1.split(" ")
+            # ignore extra spaces
+            option_list = [i for i in option_list if i != ""]
+            if len(option_list) != 5:
+                print("Please enter a valid question")
+            else:
+                # pop 'is'
+                option_list.pop(0)
+                # ignore extra spaces
+                option_list = [i.strip() for i in option_list]
+                amino = Amino(option_list[0].capitalize() + " " + option_list[1].capitalize())
+                if option_list[2].lower() == "non" and option_list[3].lower() == "essential":
+                    # checking if input is amino acid, if so, call function from
+                    # amino class with input as argument
+                    if amino.process_question(non_essential) is not None:
+                        determine_property(amino, non_essential)
 
         elif option1 == "help":
             print("Type 'amino' to input an amino acid name")
